@@ -126,27 +126,27 @@ describe('Gold Master: many random inputs compared with a reference correct impl
   function randomHand() {
     return [randomDie(), randomDie(), randomDie(), randomDie(), randomDie()];
   }
-  const functions = [
-      Yatzy.ones.name,
-      Yatzy.twos.name,
-      Yatzy.threes.name,
-      Yatzy.fours.name,
-      Yatzy.fives.name,
-      Yatzy.sixes.name,
-      Yatzy.chance.name,
-      Yatzy.onePair.name,
-      Yatzy.twoPairs.name,
-      Yatzy.threeOfAKind.name,
-      Yatzy.fourOfAKind.name,
-      Yatzy.smallStraight.name,
-      Yatzy.largeStraight.name,
-      Yatzy.fullHouse.name,
-      Yatzy.yatzy.name,
-  ]
+  const functionNames = [
+      Yatzy.ones,
+      Yatzy.twos,
+      Yatzy.threes,
+      Yatzy.fours,
+      Yatzy.fives,
+      Yatzy.sixes,
+      Yatzy.chance,
+      Yatzy.onePair,
+      Yatzy.twoPairs,
+      Yatzy.threeOfAKind,
+      Yatzy.fourOfAKind,
+      Yatzy.smallStraight,
+      Yatzy.largeStraight,
+      Yatzy.fullHouse,
+      Yatzy.yatzy,
+  ].map(f=>f.name)
 
   for (let i = 0; i < 1000; i++) {
     let hand = randomHand();
-    for (const functionName of functions) {
+    for (const functionName of functionNames) {
       // @ts-ignore
       const expected = YatzyReference[functionName](hand[0], hand[1], hand[2], hand[3], hand[4]);
       it(`for ${hand} ${functionName} = ${expected}`, () => {
