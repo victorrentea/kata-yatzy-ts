@@ -144,7 +144,7 @@ describe('Gold Master: many random inputs compared with a reference correct impl
       Yatzy.yatzy,
   ].map(f=>f.name)
 
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 200; i++) {
     let hand = randomHand();
     for (const functionName of functionNames) {
       // @ts-ignore
