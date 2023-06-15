@@ -1,187 +1,141 @@
+class DieCount {
+    constructor(
+        public readonly die: number,
+        public readonly count: number
+    ) {
+    }
+}
+
+declare global {
+
+    export interface Array<T> {
+        sum(): number
+    }
+}
+
+Array.prototype.sum = function () {
+    return this.reduce((acc, v) => acc + v, 0);
+}
+
+
+
 export default class Yatzy {
 
-  static chance(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var total = 0;
-    total += d1;
-    total += d2;
-    total += d3;
-    total += d4;
-    total += d5;
-    return total;
-  }
-
-  static yatzy(...args: number[]): number {
-    var counts = [0, 0, 0, 0, 0, 0, 0, 0];
-    for (var i = 0; i != args.length; ++i) {
-      var die = args[i];
-      counts[die - 1]++;
+    static chance(...dice: number[]): number {
+        return dice.sum();
     }
-    for (i = 0; i != 6; i++) if (counts[i] == 5) return 50;
-    return 0;
-  }
 
-  static ones(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var sum = 0;
-    if (d1 == 1) sum++;
-    if (d2 == 1) sum++;
-    if (d3 == 1) sum++;
-    if (d4 == 1) sum++;
-    if (d5 == 1) sum++;
-
-    return sum;
-  }
-
-  static twos(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var sum = 0;
-    if (d1 == 2) sum += 2;
-    if (d2 == 2) sum += 2;
-    if (d3 == 2) sum += 2;
-    if (d4 == 2) sum += 2;
-    if (d5 == 2) sum += 2;
-    return sum;
-  }
-
-  static threes(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var s;
-    s = 0;
-    if (d1 == 3) s += 3;
-    if (d2 == 3) s += 3;
-    if (d3 == 3) s += 3;
-    if (d4 == 3) s += 3;
-    if (d5 == 3) s += 3;
-    return s;
-  }
-
-  static onePair(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var counts = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-    counts[d1 - 1]++;
-    counts[d2 - 1]++;
-    counts[d3 - 1]++;
-    counts[d4 - 1]++;
-    counts[d5 - 1]++;
-    var at;
-    for (at = 0; at != 6; at++) if (counts[6 - at - 1] >= 2) return (6 - at) * 2;
-    return 0;
-  }
-
-  static twoPairs(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var counts = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-    counts[d1 - 1]++;
-    counts[d2 - 1]++;
-    counts[d3 - 1]++;
-    counts[d4 - 1]++;
-    counts[d5 - 1]++;
-    var n = 0;
-    var score = 0;
-    for (let i = 0; i < 6; i += 1)
-      if (counts[6 - i - 1] >= 2) {
-        n++;
-        score += 6 - i;
-      }
-    if (n == 2) return score * 2;
-    else return 0;
-  }
-
-  static fourOfAKind(_1: number, _2: number, d3: number, d4: number, d5: number): number {
-    var tallies;
-    tallies = [0, 0, 0, 0, 0, 0, 0, 0];
-    tallies[_1 - 1]++;
-    tallies[_2 - 1]++;
-    tallies[d3 - 1]++;
-    tallies[d4 - 1]++;
-    tallies[d5 - 1]++;
-    for (let i = 0; i < 6; i++) if (tallies[i] >= 4) return (i + 1) * 4;
-    return 0;
-  }
-
-  static threeOfAKind(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var t;
-    t = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-    t[d1 - 1]++;
-    t[d2 - 1]++;
-    t[d3 - 1]++;
-    t[d4 - 1]++;
-    t[d5 - 1]++;
-    for (let i = 0; i < 6; i++) if (t[i] >= 3) return (i + 1) * 3;
-    return 0;
-  }
-
-  static smallStraight(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var tallies;
-    tallies = [0, 0, 0, 0, 0, 0, 0];
-    tallies[d1 - 1] += 1;
-    tallies[d2 - 1] += 1;
-    tallies[d3 - 1] += 1;
-    tallies[d4 - 1] += 1;
-    tallies[d5 - 1] += 1;
-    if (tallies[0] == 1 && tallies[1] == 1 && tallies[2] == 1 && tallies[3] == 1 && tallies[4] == 1) return 15;
-    return 0;
-  }
-
-  static largeStraight(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var tallies;
-    tallies = [0, 0, 0, 0, 0, 0, 0, 0];
-    tallies[d1 - 1] += 1;
-    tallies[d2 - 1] += 1;
-    tallies[d3 - 1] += 1;
-    tallies[d4 - 1] += 1;
-    tallies[d5 - 1] += 1;
-    if (tallies[1] == 1 && tallies[2] == 1 && tallies[3] == 1 && tallies[4] == 1 && tallies[5] == 1) return 20;
-    return 0;
-  }
-
-  static fullHouse(d1: number, d2: number, d3: number, d4: number, d5: number): number {
-    var tallies;
-    var _2 = false;
-    var i;
-    var _2_at = 0;
-    var _3 = false;
-    var _3_at = 0;
-
-    tallies = [0, 0, 0, 0, 0, 0, 0, 0];
-    tallies[d1 - 1] += 1;
-    tallies[d2 - 1] += 1;
-    tallies[d3 - 1] += 1;
-    tallies[d4 - 1] += 1;
-    tallies[d5 - 1] += 1;
-
-    for (i = 0; i != 6; i += 1)
-      if (tallies[i] == 2) {
-        _2 = true;
-        _2_at = i + 1;
-      }
-
-    for (i = 0; i != 6; i += 1)
-      if (tallies[i] == 3) {
-        _3 = true;
-        _3_at = i + 1;
-      }
-
-    if (_2 && _3) return _2_at * 2 + _3_at * 3;
-    else return 0;
-  }
-
-  static fours(...p: number[]): number {
-    var sum;
-    sum = 0;
-    for (let at = 0; at != 5; at++) {
-      if (p[at] == 4) {
-        sum += 4;
-      }
+    static ones(...dice: number[]): number {
+        return this.addAll(dice, 1)
     }
-    return sum;
-  }
 
-  static fives(...dice: number[]): number {
-    let s = 0;
-    var i;
-    for (i = 0; i < dice.length; i++) if (dice[i] == 5) s = s + 5;
-    return s;
-  }
+    static twos(...dice: number[]): number {
+        return this.addAll(dice, 2)
+    }
 
-  static sixes(...dice: number[]): number {
-    let sum = 0;
-    for (var at = 0; at < dice.length; at++) if (dice[at] == 6) sum = sum + 6;
-    return sum;
-  }
+    static threes(...dice: number[]): number {
+        return this.addAll(dice, 3)
+    }
+
+    static fours(...dice: number[]): number {
+        return this.addAll(dice, 4)
+    }
+
+    static fives(...dice: number[]): number {
+        return this.addAll(dice, 5)
+    }
+
+    static sixes(...dice: number[]): number {
+        return this.addAll(dice, 6)
+
+    }
+
+    private static addAll(dice: number[], value: any) {
+        return dice.filter(v => v === value).length * value;
+    }
+
+    static yatzy(...args: number[]): number {
+        const counts = this.countOccurrences(args);
+        if (counts.find(dc => dc.count == 5)) {
+            return 50;
+        } else {
+            return 0;
+        }
+    }
+
+    static onePair(...args: number[]): number {
+        let maxDie = this.countOccurrences(args)
+            .filter(dc => dc.count >= 2)
+            .map(dc => dc.die)
+            .reverse()[0] || 0;
+        // dream: what if I could filter the dice that have >=2 and then take the max
+        return maxDie * 2;
+    }
+
+    private static countOccurrences(args: number[]) {
+        const counts = [0, 0, 0, 0, 0, 0, 0, 0];
+        for (let i = 0; i < 5; ++i) {
+            counts[args[i]]++;
+        }
+        const result = [];
+        for (let i = 0; i < counts.length; i++) {
+            if (counts[i]) {
+                result.push(new DieCount(i, counts[i]));
+            }
+        }
+        return result;
+    }
+
+    static twoPairs(...args: number[]): number {
+        let diceWithPair = this.countOccurrences(args)
+            .filter(dc => dc.count >= 2)
+            .map(dc => dc.die);
+        if (diceWithPair.length != 2) {
+            return 0;
+        } else {
+            return 2 * diceWithPair[0] + 2 * diceWithPair[1];
+        }
+    }
+
+    static threeOfAKind(...args: number[]): number {
+        let d = this.countOccurrences(args)
+            .filter(dc => dc.count >= 3)
+            .map(dc => dc.die)
+            [0] || 0;
+        return d * 3;
+    }
+
+    // TODO vrentea MON: fix it: inroduce a Hand class as param
+    static fourOfAKind(...args: number[]): number {
+        let d = this.countOccurrences(args)
+            .filter(dc => dc.count >= 4)
+            .map(dc => dc.die)
+            [0] || 0;
+        return d * 4;
+    }
+
+    // 2 3 4 5 6 big straight
+    static smallStraight(...args: number[]): number {
+        let match = JSON.stringify(args.sort()) === JSON.stringify([1, 2, 3, 4, 5]);
+        return match ? 15 : 0;
+    }
+
+    static largeStraight(...args: number[]): number {
+        const match = JSON.stringify(args.sort()) === JSON.stringify([2, 3, 4, 5, 6]);
+        return match ? 20 : 0;
+    }
+
+    static fullHouse(...args: number[]): number {
+        const occ = this.countOccurrences(args);
+        const has3 = occ.some(dc => dc.count == 3)
+        const has2 = occ.some(dc => dc.count == 2)
+
+        if (has3 && has2) {
+            return args.sum();
+        } else {
+            return 0;
+        }
+
+
+    }
 }

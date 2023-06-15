@@ -69,6 +69,8 @@ describe('One pair', () => {
   it('scores the sum of the highest pair', () => {
     assert.strictEqual(6, Yatzy.onePair(3, 4, 3, 5, 6));
     assert.strictEqual(10, Yatzy.onePair(5, 3, 3, 3, 5));
+    assert.strictEqual(10, Yatzy.onePair(5, 5, 3, 3, 1));
+    assert.strictEqual(10, Yatzy.onePair( 3, 3,5, 5, 1));
     assert.strictEqual(12, Yatzy.onePair(5, 3, 6, 6, 5));
   });
 });
