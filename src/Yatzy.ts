@@ -21,6 +21,7 @@ Array.prototype.sum = function () {
 
 export default class Yatzy {
 
+
     static chance(...dice: number[]): number {
         return dice.sum();
     }
@@ -47,11 +48,10 @@ export default class Yatzy {
 
     static sixes(...dice: number[]): number {
         return this.addAll(dice, 6)
-
     }
 
     private static addAll(dice: number[], value: any) {
-        return dice.filter(v => v === value).length * value;
+        return dice.filter(v => v === value).sum();
     }
 
     static yatzy(...args: number[]): number {
@@ -70,20 +70,6 @@ export default class Yatzy {
             .reverse()[0] || 0;
         // dream: what if I could filter the dice that have >=2 and then take the max
         return maxDie * 2;
-    }
-
-    private static countOccurrences(args: number[]) {
-        const counts = [0, 0, 0, 0, 0, 0, 0, 0];
-        for (let i = 0; i < 5; ++i) {
-            counts[args[i]]++;
-        }
-        const result = [];
-        for (let i = 0; i < counts.length; i++) {
-            if (counts[i]) {
-                result.push(new DieCount(i, counts[i]));
-            }
-        }
-        return result;
     }
 
     static twoPairs(...args: number[]): number {
@@ -106,6 +92,7 @@ export default class Yatzy {
     }
 
     // TODO vrentea MON: fix it: inroduce a Hand class as param
+
     static fourOfAKind(...args: number[]): number {
         let d = this.countOccurrences(args)
             .filter(dc => dc.count >= 4)
@@ -113,13 +100,12 @@ export default class Yatzy {
             [0] || 0;
         return d * 4;
     }
-
     // 2 3 4 5 6 big straight
+
     static smallStraight(...args: number[]): number {
         let match = JSON.stringify(args.sort()) === JSON.stringify([1, 2, 3, 4, 5]);
         return match ? 15 : 0;
     }
-
     static largeStraight(...args: number[]): number {
         const match = JSON.stringify(args.sort()) === JSON.stringify([2, 3, 4, 5, 6]);
         return match ? 20 : 0;
@@ -135,7 +121,19 @@ export default class Yatzy {
         } else {
             return 0;
         }
+    }
 
-
+    private static countOccurrences(args: number[]) {
+        const counts = [0, 0, 0, 0, 0, 0, 0, 0];
+        for (let i = 0; i < 5; ++i) {
+            counts[args[i]]++;
+        }
+        const result = [];
+        for (let i = 0; i < counts.length; i++) {
+            if (counts[i]) {
+                result.push(new DieCount(i, counts[i]));
+            }
+        }
+        return result;
     }
 }
